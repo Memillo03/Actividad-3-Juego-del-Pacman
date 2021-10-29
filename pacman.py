@@ -35,7 +35,7 @@ for i in range(0,400):
     tiles.append(0)
 
 #Se crea un patrón aleatoria para el tablero, manteniendo el borde superior, inferior e izquierdo
-#El problema de realizar el tablero con random, es que el pacman o los fantasmas 
+#El problema de realizar el tablero con random, es que el pacman o los fantasmas
 #pueden aparecer en una tile con valor de 0
 
 #Esta funcion evita que tiles con valor de 0 aparezan en las posiciones de los ghosts y el pacman
@@ -67,7 +67,7 @@ for k in range(18,len(tiles),20):
 
 for k in range(19,len(tiles),20):
     tiles[k] = 0
-    
+
 #Se conserva el tablero original para probar la mejora en la inteligencia de los fantasmas
 # tiles = [
 #     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -92,6 +92,7 @@ for k in range(19,len(tiles),20):
 #     0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 # ]
 # fmt: on
+
 
 def square(x, y):
     "Draw square using path at (x, y)."
@@ -183,10 +184,20 @@ def move():
                 vector(0, 10),
                 vector(0, -10),
             ]
-            plan = choice(options)
-            course.x = plan.x
-            course.y = plan.y
+            # Algoritmo de seguimiento al jugador
+            if pacman.y > point.y:
+                plan = options[2]
+            else:
+                plan = options[3]
 
+            if not valid(point + plan):
+                if pacman.x > point.x:
+                    plan = options[0]
+                else:
+                    plan = options[1]
+
+            course.y = plan.y
+            course.x = plan.x
         up()
         goto(point.x + 10, point.y + 10)
         dot(20, 'red')
@@ -221,4 +232,5 @@ onkey(lambda: change(0, 10), 'Up')
 onkey(lambda: change(0, -10), 'Down')
 world()
 move()
+done()
 done()
